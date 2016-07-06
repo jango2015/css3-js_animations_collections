@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<!-- saved from url=(0020)http://www.mints.cc/ -->
+<html xmlns:fb="http://ogp.me/ns/fb#"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+	<title>Mint's</title>
+	<link rel="stylesheet" id="global-css" href="./Mint&#39;s_files/style.css" type="text/css" media="all">
+	<script type="text/javascript" src="./Mint&#39;s_files/libs.min.js"></script>
+	<script type="text/javascript">
+	function getValueByParameter (name) {
+		name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+		var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+			results = regex.exec(location.search);
+		return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+	}
+
+			var is_weixin = false;
+	
+				if (getValueByParameter('lang') != '') {
+			var set_lang = getValueByParameter('lang');
+		} else {
+			var set_lang = false;
+		}
+		</script>
+	<script type="text/javascript" src="./Mint&#39;s_files/functions.js"></script>
+</head>
+<body class="city pace-done pace-done"><div class="pace  pace-inactive pace-inactive"><div class="pace-progress" data-progress-text="100%" data-progress="99" style="transform: translate3d(100%, 0px, 0px);">
+  <div class="pace-progress-inner"></div>
+</div>
+<div class="pace-activity"></div></div>
+	<div id="wrap" class="wrap">
+		<div id="app" class="content">
+		<div class="table">
+			<div class="table-cell fade-transition">
+				<div class="language">
+					<!--v-if-->
+					<span class="en">EN</span><!--v-if-->
+				</div>
+				<img class="logo" src="./Mint&#39;s_files/logo.svg">
+				<div class="box">
+					<h1 class="heading">请选择送餐地区(现仅供上海内环)</h1>
+					<ul class="button-list">
+						<!--v-for-start--><li>
+							<a class="button" href="http://www.mints.cc/list">静安区</a>
+						</li><li>
+							<a class="button" href="http://www.mints.cc/list">徐汇区</a>
+						</li><li>
+							<a class="button" href="http://www.mints.cc/list">黄浦区</a>
+						</li><!--v-for-end-->
+					</ul>
+					<div class="link"><a href="http://www.mints.cc/page/faq">我不在以上地区怎么办？</a></div>
+				</div>
+			</div>
+			<div class="cover cover-home"></div>
+		</div></div>
+	</div>
+	<div class="ajax-overlay" id="js-ajax-overlay"><div class="spinner"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+	<script type="text/v-template" id="home">
+		<div class="table">
+			<div class="table-cell"	v-if="response.show" transition="fade">
+				<div class="language">
+					<span v-if="response.is_cn" class="cn" v-on:click="setLanguage('zh')">中文</span>
+					<span v-if="response.is_en" class="en" v-on:click="setLanguage('en')">EN</span>
+				</div>
+				<img class="logo" src="/images/svg/logo.svg">
+				<div class="box">
+					<h1 class="heading">{{response.text.heading}}</h1>
+					<ul class="button-list">
+						<li v-for="item in response.data.regions">
+							<a class="button" href="/list" v-on:click="update(item.region_id)">{{item.region_name}}</a>
+						</li>
+					</ul>
+					<div class="link"><a href="/page/faq">{{response.text.linkText}}</a></div>
+				</div>
+			</div>
+			<div class="cover cover-home"></div>
+		</div>
+	</script>
+
+	<script type="text/v-template" id="notfound">
+		<div class="table">
+			<div class="table-cell"	v-if="response.show" transition="fade">
+				<div class="box">
+					<h1 class="heading">{{response.text.heading}}</h1>
+					<p class="text">{{response.text.text}}</p>
+					<div class="link"><a href="/">{{response.text.linkText}}</a></div>
+				</div>
+			</div>
+		</div>
+		<div class="cover cover-2"></div>
+	</script>
+
+	<script type="text/v-template" id="page">
+		<div class="table" >
+			<div class="table-cell" v-if="response.show" transition="fade">
+				<div class="box">
+					<h1 class="heading">{{response.heading}}</h1>
+					<div class="text">
+						{{{response.content}}}
+					</div>
+				</div>
+			</div>
+			<div v-if="response.show" transition="fade" class="cover cover-2"></div>
+		</div>
+		<footer class="footer back-button" v-if="response.show" transition="fade">
+			<div class="inner">
+				<button class="button" v-on:click="back">{{response.buttonText}}</button>
+			</div>
+		</footer>
+	</script>
+
+	<script type="text/v-template" id="cook">
+		<div class="table" >
+			<div class="table-cell" v-if="response.show" transition="fade">
+				<div class="box">
+					<img v-if="response.cook.cook_avatar" v-bind:src="response.cook.cook_avatar" class="avatar">
+					<img v-else="response.cook.cook_avatar" src='/temp/avatar.jpg' class="avatar">
+					<h1 class="heading">{{response.cook.cook_name}}</h1>
+					<div class="text">
+						{{{response.cook.cook_desc}}}
+					</div>
+				</div>
+			</div>
+			<div v-if="response.show" transition="fade" class="cover cover-2"></div>
+		</div>
+		<footer class="footer back-button" v-if="response.show" transition="fade">
+			<div class="inner">
+				<button class="button" v-on:click="back">{{response.text.buttonText}}</button>
+			</div>
+		</footer>
+	</script>
+
+	<script type="text/v-template" id="dish">
+		<div class="dish-item" v-if="response.show" transition="fade">
+			<div class='slider' id='slider'>
+				<img v-for="item in response.dish.photos" v-bind:src="item">
+			</div>
+			<div class="col">
+				<header class="clearfix">
+					<strong>{{response.dish.dish_price}}</strong>
+					<a href="/cook/{{response.dish.cook_id}}">
+						<img v-if="response.dish.cook_avatar" v-bind:src="response.dish.cook_avatar" class="avatar">
+						<img v-else="response.dish.cook_avatar" src='/temp/avatar.jpg' class="avatar">
+					</a>
+					<span>{{response.dish.cook_name}}</span>
+				</header>
+				
+				<div class="text">
+					<h1>{{response.dish.dish_name}} <span>{{response.dish.capacity}}g</span></h1>
+					<p class="meta">
+						<span v-for="item in response.dish.dish_tags"><img v-bind:src="'/images/ico-'+( $index+1 )+'.png'"> {{item}}</span>
+					</p>
+					<div class="enter">
+						{{response.dish.dish_desc}}
+					</div>
+				</div>
+
+				<div class="info">
+					<h2>{{language.text_nutrient}}</h2>
+					<ul class="ul-1 clearfix">
+						<li class="clearfix">
+							<div class="td left">{{language.text_calorie}}</div>
+							<div class="td right">{{response.dish.calorie}} cal</div>
+						</li>
+						<li class="clearfix">
+							<div class="td left">{{language.text_carbohydrate}}</div>
+							<div class="td right">{{response.dish.carbohydrate}} g</div>
+						</li>
+						<li class="clearfix">
+							<div class="td left">{{language.text_fat}}</div>
+							<div class="td right">{{response.dish.fat}} g</div>
+						</li>
+						<li class="clearfix">
+							<div class="td left">{{language.text_protein}}</div>
+							<div class="td right">{{response.dish.protein}} g</div>
+						</li>
+					</ul>
+				</div>
+
+				<div class="info">
+					<h2>{{language.text_ingredients}}</h2>
+					<ul class="ul-2 clearfix">
+						<li v-for="item in response.dish.ingredient">
+							<h3>{{item.name}}<h3>
+							<p>{{item.desc_zh}}</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<footer class="footer cart-button" v-if="response.show" transition="fadelast">
+			<div class="inner">
+				<div class="table">
+					<div class="right">
+						<a class="link" v-bind:class="{ 'show': cart.total_price != '0.00'}" href="/cart"></a>
+						<button v-on:click="hasLogin" type="button" class="button cart-info" v-bind:class="{ 'active': cart.total_price != '0.00'}">
+							<i class="icon">
+								<span v-if="cart.items.length !== 0" class="num">{{cart.total_length}}</span>
+							</i>
+							<span v-if="cart.total_price != '0.00'" class="price">{{cart.total_price}}</span>
+						</button>
+					</div>
+					<div class="left">
+						<button v-if="response.dish.remainder_count" v-on:click="addToCart" type="button" class="button add-cart">{{response.text.buyText}}</button>
+						<button v-else="response.dish.remainder_count" type="button" class="button add-cart sold-out">{{response.text.soldOutText}}</button>
+					</div>
+				</div>
+			</div>
+		</footer>
+
+		<modal :show.sync="validation">
+			<div slot="body">
+				<div class="modal-body">
+					{{{validationText}}}
+				</div>
+			</div>
+			<div slot="footer">
+				<button class="button" v-on:click="close">{{language.button_close_text}}</button>
+			</div>
+		</modal>
+	</script>
+
+	<script type="text/v-template" id="list">
+		<div class="inner-page">
+						<header class="list-header" v-if="response.show" transition="fade">
+				<div class="text">
+					<a href="/page/time"><img class="logo-text" src="/images/svg/logo-text.svg">
+					<p class="desc">{{response.text.text}}</p></a>
+				</div>
+				<img src="/images/banner2.jpg">
+			</header>
+			<nav class="tab-navi" v-if="response.show_navi" transition="fade">
+				<ul>
+					<li v-bind:class="{ 'active': item.current }" v-for="item in response.navi" data-id="{{item.category_id}}" v-on:click="navi">{{item.category_name}}</li>
+				</ul>
+			</nav>
+
+			<section class="list" v-if="response.show_list" transition="fade">
+				<article v-for="item in response.list" class="item">
+					<div v-if="item.error" class="col">
+						<h1 class="error-info">{{item.errorText}}</h1>
+					</div>
+					<div v-else="item.error" class="col">
+						<div class="info">
+							<div class="add-cart" v-if="item.remainder_count" v-on:click="addToCart(item.dish_id)">
+								<span class="price">{{{item.dish_price}}}</span>
+								<span v-on:click="update" data-remainder-count="{{remainder_count}}" data-id="{{item.dish_id}}" data-name="{{item.dish_name}}" data-img="{{item.dish_cover}}" data-price="{{{item.dish_price}}}" class="button">{{response.text.buyText}}</span>
+							</div>
+							<div class="add-cart sold-out" v-else="item.remainder_count">
+								<span class="price">{{{item.dish_price}}}</span>
+								<span class="button">{{response.text.soldOutText}}</span>
+							</div>
+							<a href="/cook/{{item.cook_id}}">
+								<img v-if="item.cook_avatar" v-bind:src="item.cook_avatar" class="avatar">
+								<img v-else="item.cook_avatar" src='/temp/avatar.jpg' class="avatar">
+							</a>
+							<div class="text">
+								<h1><a href="/dish/{{item.dish_id}}"
+								>{{item.dish_name}}</a></h1>
+								<h2>{{item.cook_name}}</h2>
+								<p><span v-for="item in item.ingredient">{{item.name}}</span></p>
+							</div>
+						</div>
+						<a href="/dish/{{item.dish_id}}" class="img">
+							<img class="dish-image" v-if="item.dish_cover" v-bind:src="item.dish_cover">
+							<img class="cover-image" src="/images/img.png">
+						</a>
+					</div>
+				</article>
+			</section>
+
+			<footer class="list-footer">
+				<img class="logo" src="/images/svg/logo-f.svg">
+			</footer>
+		</div>
+
+		<footer class="footer cart-button" v-if="response.show" transition="fadelast">
+			<div class="inner">
+				<div class="table">
+					<div class="right">
+						<a class="link" v-bind:class="{ 'show': cart.total_price  != '0.00'}" href="/cart"></a>
+						<button v-on:click="hasLogin" type="button" class="button cart-info" v-bind:class="{ 'active': cart.total_price  != '0.00'}">
+							<i class="icon">
+								<span v-if="cart.items.length !== 0" class="num">{{cart.total_length}}</span>
+							</i>
+							<span v-if="cart.total_price  != '0.00'" class="price">{{cart.total_price}}</span>
+						</button>
+					</div>
+					<div class="left">
+					</div>
+				</div>
+			</div>
+		</footer>
+
+		<modal :show.sync="validation">
+			<div slot="body">
+				<div class="modal-body">
+					{{{validationText}}}
+				</div>
+			</div>
+			<div slot="footer">
+				<button class="button" v-on:click="closeModal">{{language.button_close_text}}</button>
+			</div>
+		</modal>
+	</script>
+	
+	<script type="text/v-template" id="cart">
+		<div class="admin-page">
+			<section class="cart-list" v-if="response.show" transition="fade">
+				<article v-for="item in cart.items" v-if="item.dish_count > 0" class="item clearfix">
+					<div v-if="item.error" class="col">
+						<h1 class="error-info">{{item.errorText}}</h1>
+					</div>
+					<div v-else="item.error" class="col">
+						<span class="img">
+							<img v-if="item.photo_url" v-bind:src="item.photo_url">
+							<img v-else="item.photo_url" src="/temp/img.jpg">
+						</span>
+						<strong>{{item.dish_price}}</strong>
+						<div class="info">
+							<h1>{{item.dish_name}}</h1>
+							<time>{{language.delivery_time}} {{order.expect_deliver_date}}</time>
+							<p>
+								<button type="button" class="remove" v-on:click="remove(item.dish_id)"></button>
+								<input readonly value="{{item.dish_count}}">
+								<button type="button" class="add" v-on:click="add(item.dish_id)"></button>
+							</p>
+						</div>
+					</div>
+				</article>
+				<footer class="cart-count">
+					{{language.enter_num}}<strong>{{price}}</strong>
+										<p>{{language.delivery_text_2 + order.driveramount + language.delivery_yen}}</p>
+				</footer>
+				<a class="button" href="/settle-accounts">{{language.button_to_pay}}</a>
+			</section>
+		</div>
+		<modal :show.sync="notfound">
+			<div slot="body">
+				<div class="modal-body">
+					{{notfoundText}}
+				</div>
+			</div>
+			<div slot="footer">
+				<button class="button" v-on:click="goToList">{{language.button_pay_text}}</button>
+			</div>
+		</modal>
+	</script>
+
+	<script type="text/v-template" id="settle-accounts">
+		<div class="inner-page" v-if="response.show" transition="fade">
+			<div class="settle-item address" v-bind:class="{'active': order.showActive}">
+				<a href="/address"></a>
+				<div class="left">
+					<label v-if="order.currentAddress">
+						<p><span class="name">{{order.currentAddress.name}}</span><span class="tel">{{order.currentAddress.telephone}}</span></p>
+						<p>{{order.currentAddress.address}}</p>
+					</label>
+					<label v-else="order.currentAddress">{{language.enter_text}}</label>
+				</div>
+				<div class="right"><img class="svg-arrow" src="/images/svg/arrow-1.svg"></div>
+			</div>
+
+			<div class="settle-item timer">
+				<a href="/delivery-time"></a>
+				<div class="left"><label>{{language.enter_delivery_time}}</label></div>
+				<div class="right">
+					{{order.expect_deliver_date}}<br>
+					{{order.expect_deliver_duration}}
+					<img class="svg-arrow" src="/images/svg/arrow-1.svg">
+				</div>
+			</div>
+
+			<div class="settle-item coupon">
+				<a href="/promo-code"></a>
+				<div class="left"><label>{{language.enter_promo_code}}</label></div>
+				<div class="right">
+					<p v-if="order.discount_code">{{order.discount_code}} <span v-if="order.discount_price">- {{language.enter_discount_price}}￥ {{order.discount_price}}</span></p>
+					<img class="svg-arrow" src="/images/svg/arrow-1.svg">
+				</div>
+			</div>
+
+			<div class="settle-item timer">
+				<a href="/invoice"></a>
+				<div class="left"><label>{{language.enter_invoice_title}}</label></div>
+				<div class="right">
+					<p v-if="order.invoice_title">{{order.invoice_title}}</p>
+					<p v-else="order.invoice_title">{{language.enter_no_invoice_title}}</p>
+					<img class="svg-arrow" src="/images/svg/arrow-1.svg">
+				</div>
+			</div>
+			
+
+			<div class="settle-item items">
+				<ul>
+					<li v-for="item in cart.items" class="item clearfix">
+						<strong>{{item.dish_count * item.dish_price}}</strong>
+						<h1>{{item.dish_name}} <span>x {{item.dish_count}}</span></h1>
+					</li>
+					<li class="count">
+						<strong>{{order.driveramount}}</strong>
+						<h1>{{language.delivery_text}}</h1>
+					</li>
+				</ul>
+			</div>
+
+			<div class="settle-submit">
+				<div v-on:click="pay_order" class="button">{{language.enter_pay_text}}<span>￥{{price}}</span></div>
+				<p style="text-align: left;">{{language.enter_pay_note}}</p>
+			</div>
+		</div>
+		<modal :show.sync="response.notfound">
+			<div slot="body">
+				<div class="modal-body">
+					{{response.text}}
+				</div>
+			</div>
+			<div slot="footer">
+				<button class="button" v-on:click="backCart">{{language.button_ok_text}}</button>
+			</div>
+		</modal>
+		<modal :show.sync="validation">
+			<div slot="body">
+				<div class="modal-body">
+					{{{validationText}}}
+				</div>
+			</div>
+			<div slot="footer">
+				<button class="button" v-on:click="close">{{language.button_close_text}}</button>
+			</div>
+		</modal>
+	</script>
+
+	<script type="text/v-template" id="address">
+		<div class="inner-page" transition="fade">
+			<div class="settle-item address-list">
+				<div v-for="item in order.address" class="item" v-bind:class="{'current': item.current}">
+					<div v-on:click="select(item.index)">
+						<p><span class="name">{{item.name}}</span><span class="tel">{{item.telephone}}</span></p>
+						<p>{{item.address}}</p>
+					</div>
+					<a class="edit" href="/address/edit/{{item.index}}"><img src="/images/svg/edit.svg"></a>
+				</div>
+			</div>
+			<a class="settle-item link" href="/address/add"><img src="/images/svg/plus.svg">{{language.enter_add_address}}</a>
+		</div>
+	</script>
+
+	<script type="text/v-template" id="edit-address">
+		<div class="inner-page" transition="fade">
+			<div class="settle-item form">
+				<div class="form-item form-item-text form-item-hr">
+					<label>{{language.form_contact}}</label>
+					<input v-if="response.edit" id="name" name="name" type="text" value="{{response.address.name}}"  v-model="response.address.name" placeholder="{{language.form_name}}">
+					<input v-else="response.edit" id="name" name="name" type="text" value="" placeholder="{{language.form_name}}">
+				</div>
+				<div v-if="response.edit" class="form-item form-item-radio">
+					<span class="ui-checkbok"><input id="sex_1" name="sex" type="radio" value="1"  v-model="response.address.sex"><label for="sex_1">{{language.form_sex_1}}</label></span>
+					<span class="ui-checkbok"><input id="sex_2" name="sex" type="radio" value="0"  v-model="response.address.sex"><label for="sex_2">{{language.form_sex_2}}</label></span>
+				</div>
+				<div v-else="response.edit" class="form-item form-item-radio">
+					<span class="ui-checkbok"><input id="sex_1" name="sex" type="radio" value="1"><label for="sex_1">{{language.form_sex_1}}</label></span>
+					<span class="ui-checkbok"><input id="sex_2" name="sex" type="radio" value="0"><label for="sex_2">{{language.form_sex_2}}</label></span>
+				</div>
+			</div>
+			<div class="settle-item form">
+				<div class="form-item form-item-text">
+					<label>{{language.form_tel_label}}</label>
+					<input v-if="response.edit" name="telephone" type="text" value="{{response.address.telephone}}" v-model="response.address.telephone" placeholder="{{language.form_tel}}">
+					<input v-else="response.edit" name="telephone" type="text" value="" placeholder="{{language.form_tel}}">
+				</div>
+			</div>
+			<div class="settle-item form">
+				<div class="form-item form-item-text">
+					<label>{{language.form_address_label}}</label>
+					<input v-if="response.edit" name="address" type="text" value="{{response.address.address}}" v-model="response.address.address" placeholder="{{language.form_address}}">
+					<input v-else="response.edit" name="address" type="text" value="" placeholder="{{language.form_address}}">
+				</div>
+			</div>
+			<div class="settle-submit">
+				<button v-if="response.edit" type="button" class="button" v-on:click="upeate(response.address.index)">{{language.button_save}}</button>
+				<button v-else="response.edit" type="button" class="button" v-on:click="upeate('new')">{{language.button_add_new}}</button>
+			</div>
+		</div>
+		<modal :show.sync="response.notfound">
+			<div slot="body">
+				<div class="modal-body">
+					{{response.text}}
+				</div>
+			</div>
+			<div slot="footer">
+				<button class="button" v-on:click="backCart">{{language.button_ok_text}}</button>
+			</div>
+		</modal>
+		<modal :show.sync="response.validation">
+			<div slot="body">
+				<div class="modal-body">
+					{{{response.validationText}}}
+				</div>
+			</div>
+			<div slot="footer">
+				<button class="button" v-on:click="close">{{language.button_close_text}}</button>
+			</div>
+		</modal>
+	</script>
+
+	<script type="text/v-template" id="delivery-time">
+		<div class="inner-page" transition="fade">
+			<div class="time-list">
+				<h2>{{order.dates.date}}</h2>
+				<div class="settle-item" v-for="time in order.dates.timer" v-on:click="select(order.dates.date, time.time, $index)" v-bind:class="{'current': time.current}">
+					<p>{{time.time}}</p>
+				</div>
+			</div>
+			<div class="settle-submit">
+				<button type="button" class="button" v-on:click="upeate">{{language.button_yes_text}}</button>
+			</div>
+		</div>
+	</script>
+
+	<script type="text/v-template" id="promo-code">
+		<div class="inner-page" transition="fade">
+			<div class="settle-item form">
+				<div class="form-item form-item-text">
+					<input type="text" name="code" value="{{order.discount_code}}" placeholder="{{language.form_discount_code}}">
+					<hr class="hr">
+					<button type="button" class="button" v-on:click="upeate">{{language.button_yes_text}}</button>
+				</div>
+			</div>
+		</div>
+	</script>
+
+	<script type="text/v-template" id="invoice">
+		<div class="inner-page" transition="fade">
+			<div class="time-list">
+				<div class="settle-item" v-for="item in order.invoice_titles" v-on:click="select(item)" v-bind:class="{'current': item.current}">
+					<p>{{item.title}}</p>
+				</div>
+			</div>
+
+			<div class="settle-item form">
+				<div class="form-item form-item-text">
+					<input type="text" name="invoice" value="{{order.invoice_title}}" placeholder="{{language.form_invoice_title}}">
+					<hr class="hr">
+					<button type="button" class="button" v-on:click="upeate">{{language.button_yes_text}}</button>
+				</div>
+			</div>
+		</div>
+
+		<modal :show.sync="response.validation">
+			<div slot="body">
+				<div class="modal-body">
+					{{{response.validationText}}}
+				</div>
+			</div>
+			<div slot="footer">
+				<button class="button" v-on:click="close">{{language.button_close_text}}</button>
+			</div>
+		</modal>
+	</script>
+
+	<script type="text/v-template" id="orders">
+		<div class="inner-page" v-if="response.show" transition="fade">
+			<div class="order-list">
+				<div class="settle-item settle-item-state-{{item.status_code}}" v-for="item in orders">
+					<div class="left">
+						<ul v-on:click="goToCdp(item)">
+							<li v-for="item in item.items" v-if="!item.removed" transition="fade">
+								<label>{{item.dish_name}}</label>
+								<span>x{{item.dish_count}}</span>
+							</li>
+						</ul>
+						<time><label>{{language.delivery_time}}</label><span>{{item.expect_deliver_date}} {{item.expect_deliver_duration}}</span></time>
+					</div>
+					<div class="right" v-bind:class="{'disable': item.status_code === 3 || item.status_code === 4}">
+						<strong>{{item.order_amount}}</strong>
+						<p v-if="item.status_code === 1">{{{language.status_1}}}</p>
+						<p v-if="item.status_code === 2">{{{language.status_2}}}</p>
+						<p v-if="item.status_code === 3">{{{language.status_3}}}</p>
+						<p v-if="item.status_code === 4">{{{language.status_4}}}</p>
+						<p v-if="item.status_code === 5">{{{language.status_5}}}</p>
+						<p v-if="item.status_code === 6">{{{language.status_6}}}</p>
+						<p v-if="item.status_code === 7">{{{language.status_7}}}</p>
+
+						<button v-on:click="pay(item.id)" class="button-samll" v-if="item.status_code === 1">{{language.pay}}</button>
+					</div>
+
+
+				</div>
+				<div v-if="orders.length === 0" class="col">
+					<h1 class="error-info">{{language.no_orders}}</h1>
+					<p><a class="button" href="/">{{language.to_buy}}</a></p>
+				</div>
+			</div>
+
+		</div>
+	</script>
+
+	
+
+
+	<script type="text/v-template" id="order">
+		<div class="inner-page" v-if="response.show" transition="fade">
+			<div class="order-items current-{{response.currentOrder.status_code}}">
+				<div 
+					class="settle-item step step-1" 
+					v-bind:class="{ 'active': response.currentOrder.status_code == 1}" 
+					v-if="response.currentOrder.status_code != 2" 
+				>
+					<h2>{{{language.status_1}}}</h2>
+					<p v-if="response.currentOrder.status_code == 1">{{{language.status_1_text}}}</p>
+				</div>
+
+				<div 
+					class="settle-item step step-7" 
+					v-bind:class="{ 'active': response.currentOrder.status_code == 7 || response.currentOrder.status_code == 2 || response.currentOrder.status_code == 3}" 
+					v-if="response.currentOrder.status_code == 7 || response.currentOrder.status_code == 2 || response.currentOrder.status_code == 3 || response.currentOrder.status_code == 6" 
+				>
+					<h2>{{{language.status_7}}}</h2>
+					<p v-if="response.currentOrder.status_code == 7">{{{language.status_7_text}}}</p>
+				</div>
+
+				<div 
+					class="settle-item step step-2" 
+					v-bind:class="{ 'active': response.currentOrder.status_code == 2 || response.currentOrder.status_code == 3}" 
+					v-if="response.currentOrder.status_code != 4 || response.currentOrder.status_code != 1"
+				>
+					<h2 v-if="response.currentOrder.status_code == 3">{{{language.status_2_end}}}</h2>
+					<h2 v-if="response.currentOrder.status_code == 6">{{{language.status_2}}}</h2>
+					<h2 v-if="response.currentOrder.status_code == 2">{{{language.status_2}}}</h2>
+					<h2 v-if="response.currentOrder.status_code == 1">{{{language.status_2}}}</h2>
+					<p v-if="response.currentOrder.status_code == 2">{{{language.status_2_text}}} {{response.currentOrder.expect_deliver_date}} {{response.currentOrder.expect_deliver_duration}}</p>
+					<a v-if="response.currentOrder.status_code == 2" class="button-samll" href="/page/help">{{language.help_link}}</a>
+				</div>
+
+				<div 
+					class="settle-item step step-4" 
+					v-bind:class="{ 'active': response.currentOrder.status_code == 4, 'end': response.currentOrder.status_code == 4}" 
+					v-if="response.currentOrder.status_code == 4" 
+				>
+					<h2>{{{language.status_4}}}</h2>
+					<p v-if="response.currentOrder.status_code == 4">{{{language.status_4_text}}}</p>
+				</div>
+
+				<div 
+					class="settle-item step step-5" 
+					v-bind:class="{ 'active': response.currentOrder.status_code == 5}" 
+					v-if="response.currentOrder.status_code == 5" 
+				>
+					<h2>{{{language.status_5}}}</h2>
+					<p v-if="response.currentOrder.status_code == 5">{{{language.status_5_text}}}</p>
+				</div>
+
+				<div 
+					class="settle-item step step-6" 
+					v-bind:class="{ 'active': response.currentOrder.status_code == 6, 'end': response.currentOrder.status_code == 5 || response.currentOrder.status_code == 6}" 
+					v-if="response.currentOrder.status_code == 6 || response.currentOrder.status_code == 5" 
+				>
+					<h2>{{{language.status_6}}}</h2>
+					<p v-if="response.currentOrder.status_code == 6">{{{language.status_6_text}}}</p>
+				</div>
+
+				<div 
+					class="settle-item step step-3" 
+					v-bind:class="{ 'active': response.currentOrder.status_code == 3, 'end': response.currentOrder.status_code == 1 || response.currentOrder.status_code == 2}" 
+					v-if="response.currentOrder.status_code == 1 || response.currentOrder.status_code == 2 || response.currentOrder.status_code == 3"
+				>
+					<h2>{{{language.status_3}}}</h2>
+					<p v-if="response.currentOrder.status_code == 3">{{{language.status_3_text}}} {{response.currentOrder.expect_deliver_date}} {{response.currentOrder.expect_deliver_duration}}</p>
+				</div>
+
+
+
+
+
+				<div class="settle-item list">
+					<h4>{{language.order_cdp_heading}}</h4>
+					<ul>
+						<li v-for="item in response.currentOrder.items">
+							<strong>{{item.dish_price * item.dish_count}}</strong>
+							<label>{{item.dish_name}}</label>
+							<span>x{{item.dish_count}}</span>
+						</li>
+					</ul>
+					<p>
+						<strong>{{order.driveramount}}</strong>
+						<label>{{language.delivery_text}}</label>
+					</p>
+				</div>
+
+				<div class="settle-item contact">
+					<h4>{{language.order_heading}}</h4>
+					<p>
+						<label>{{language.order_coneact}}</label>
+						<span>{{response.currentOrder.recipient_name}}</span>
+					</p>
+					<p>
+						<label>{{language.order_tel}}</label>
+						<span>{{response.currentOrder.recipient_telephone}}</span>
+					</p>
+					<p>
+						<label>{{language.order_address}}</label>
+						<span>{{response.currentOrder.recipient_address}}</span>
+					</p>
+					<p>
+						<label>{{language.order_id}}</label>
+						<span>{{response.currentOrder.id}}</span>
+					</p>
+					<p>
+						<label>{{language.order_time}}</label>
+						<span>{{response.currentOrder.expect_deliver_date}} {{response.currentOrder.expect_deliver_duration}}</span>
+					</p>
+					<p>
+						<label>{{language.order_create_time}}</label>
+						<span>{{response.currentOrder.create_time}}</span>
+					</p>
+				</div>
+			
+				<footer class="footer" v-if="response.currentOrder.status_code === 1" transition="fade">
+					<div class="inner">
+						<button class="button" v-on:click="pay(response.currentOrder.id)">{{language.button_wx_pay}}￥{{response.currentOrder.order_amount}}</button>
+					</div>
+				</footer>
+			</div>
+		</div>
+
+	</script>
+
+	<script type="x/template" id="modal">
+		<div class="modal-mask" v-show="show" transition="modal">
+			<div class="modal-wrapper">
+				<div class="modal-container">
+					<slot name="body">
+						<div class="modal-header">
+							...
+						</div>
+
+						<div class="modal-body">
+							...
+						</div>
+					</slot>
+					<div class="modal-footer">
+						<slot name="footer">
+							<button class="button" v-on:click="show = false">{{language.button_ok_text}}</button>
+						</slot>
+					</div>
+				</div>
+			</div>
+		</div>
+	</script>
+
+
+
+
+
+
+</body></html>
