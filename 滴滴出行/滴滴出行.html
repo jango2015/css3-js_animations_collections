@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)http://webapp.diditaxi.com.cn/?channel=55455 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" media="(device-height: 568px)">
+    <meta name="format-detection" content="telephone=no">
+    <title>滴滴出行</title>
+    <link rel="stylesheet" type="text/css" href="./滴滴出行_files/merged-common-ui-slide-2adebe9722.css">
+    <link rel="stylesheet" type="text/css" href="./滴滴出行_files/p-home-e470dc3656.css">
+<script type="text/javascript" src="./滴滴出行_files/merged-md5-kop-5836c66c20.js"></script></head>
+
+<body>
+
+    <a id="btnMenu" dd-events="touchend1"><i>G</i></a>
+    <div class="menu-mask">
+        <div id="menu" class="l"><ul class="dd-menu "><li class="dd-menu-item phone" _idx="0"><a><i></i></a></li><li class="dd-menu-item trip" _idx="1"><a><i></i>我的行程</a></li><li class="dd-menu-item settings" _idx="2"><a><i></i>设置</a></li><li class="dd-menu-item advertisement" _idx="3"><a><i></i>司机招募</a></li><li class="dd-menu-item download" _idx="4"><a><i></i>下载客户端</a></li></ul></div>
+        <div class="r" id="btnClose" dd-events="click2">
+            <a class="closeMenu"><i></i></a>
+        </div>
+    </div>
+
+    <header>
+        <ul>
+            <li class="title">
+                <h1>您好,您要去哪里?</h1>
+                <h2 id="h_title">定位失败</h2>
+            </li>
+            <li class="adv">
+                <a>
+                    <img>
+                </a>
+            </li>
+        </ul>
+    </header>
+    <div class="main">
+        <div class="content">
+            <div class="wrap">
+                <p>
+                    <span class="i-start"></span>
+                    <input type="text" placeholder="请输入起点" id="txt_start" dd-events="focus6,input7">
+                    <span class="wrap-close" id="i-close-s" dd-events="touchend4">
+                        <i class="i-close-txt"></i>
+                    </span>
+                </p>
+                <div class="hr"></div>
+                <p class="dest">
+                    <span class="i-end"></span>
+                    <input type="text" placeholder="现在要去" id="txt_end" dd-events="focus8,input9">
+                    <span class="wrap-close" id="i-close-e" dd-events="touchend5">
+                    <i class="i-close-txt"></i>
+                    </span>
+                </p>
+                <!-- 券抵扣 -->
+                <div class="charge" id="dv_charge"></div>
+            </div>
+            <div id="d_sugs" class="d_sugs" dd-events="click3,touchmove10">
+                <div class="inputfoucus">
+                    <ul id="ul_pois"></ul>
+                </div>
+            </div>
+        </div>
+        <div class="dv-bar">
+            <div id="dv-slide-bar"></div>
+            <div id="preLoad">
+                <img _src="//static.xiaojukeji.com/webapp/images/i-s-taxi.png" id="img_diditaxi" style="display:none;width:43px;height:15px;" src="./滴滴出行_files/i-s-taxi.png">
+                <img _src="//static.xiaojukeji.com/webapp/images/i-s-udache.png" id="img_udache" style="display:none;width:46px;height:13px;" src="./滴滴出行_files/i-s-udache.png">
+                <img _src="//static.xiaojukeji.com/webapp/images/i-s-fastcar.png" id="img_fastcar" style="display:none;width:43px;height:15px;" src="./滴滴出行_files/i-s-fastcar.png">
+                <img _src="//static.xiaojukeji.com/webapp/images/i-s-daijia.png" id="img_daijia" style="display:none;width:34px;height:34px;" src="./滴滴出行_files/i-s-daijia.png">
+            </div>
+        </div>
+        <div class="footer">
+            <a class="btn-gray" id="btn_call">叫出租车</a>
+            <a id="btn_schedule">预约出租车，去订车<i></i></a>
+            <p id="btn_agree">呼叫代驾，即表示您同意<em>《代驾委托服务协议》</em>
+            </p>
+        </div>
+        <input type="hidden" id="h_openid" value="general_app">
+        <input type="hidden" id="h_phone" value="">
+        <input type="hidden" id="h_cityid">
+        <input type="hidden" id="h_priceTips">
+        <input type="hidden" id="h_priceTip">
+
+        <input type="hidden" id="hid-car-cnt" value="93">
+        <input type="hidden" id="h_access_token" value="">
+        <input type="hidden" id="h_pois">
+    </div>
+   
+    <!--<script type="text/javascript" src="//static.xiaojukeji.com/webapp/lib/dd.core-65f02929c7.js"></script>
+    <script type="text/javascript" src="//static.xiaojukeji.com/webapp/lib/dd.common-f910f140dc.js"></script>
+    <script type="text/javascript" src="//static.xiaojukeji.com/webapp/lib/dd.dialog-240ebb6ec2.js"></script>
+    <script type="text/javascript" src="//static.xiaojukeji.com/webapp/lib/sha1-e48d747e37.js"></script>
+    <script type="text/javascript" src="//static.xiaojukeji.com/webapp/lib/dd.slide-ec3d32025e.js"></script>
+    <script type="text/javascript" src="//static.xiaojukeji.com/webapp/lib/dd.banner-4249d1d32e.js"></script>
+    <script type="text/javascript" src="//static.xiaojukeji.com/webapp/lib/dd.geo-76e5492e5b.js"></script>
+    <script type="text/javascript" src="//static.xiaojukeji.com/webapp/js/ui/dd.ui.menu-57c7a2d4db.js"></script>
+    <script type="text/javascript" src="//static.xiaojukeji.com/webapp/js/p-home-3639906c41.js"></script>-->
+    <script type="text/javascript" src="./滴滴出行_files/merged-core-common-dialog-1d6d69e579.js"></script>
+    <script type="text/javascript" src="./滴滴出行_files/merged-home-4171895600.js"></script>
+
+
+<div id="d-wall" style="width: 1920px; height: 955px; display: none;"></div><div id="d-wrap" style="width: 280px; text-align: center; top: 372.5px; left: 820px; display: none; background: rgb(255, 255, 255);"><div class="alert"><p class="d-icon"><img src="./滴滴出行_files/i-plaint.png" style="width:8px;height:36px;vertical-align:middle;"></p><div class="d-tip" style="color:#333;font-size:1.6rem;">定位超时，请检查设置后重试</div><div class="d-btns clearfix"><a class="btn-orange" id="btn-close">我知道了</a></div></div></div></body></html>
